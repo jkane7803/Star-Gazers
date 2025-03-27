@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Reservations Page</title>
+    <link href="app.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="/images/StarGazersLogo.png">
+</head>
+
+<body onload="getTable('/getReservation', fillTable), fillCreatePopup()">
+
+    <!-- INSERT POPUP -->
+    <div class="popup">
+        <div class="popuptext" id="insertPopup">
+            <p id="closeNewReservationForm" class="closeform-btn">X</p>
+            <div id="newReservationRecord" class="niu">
+                <p class="centered">Please Enter Your Reservation Details Below:</p>
+                <form id="reservationInputForm" action="/insertReservation">
+                    <label>University Name:</label>
+                    <select id="university_name" name="university_name" required>
+                    </select>
+                    </br>
+                    </br>
+                    <label>Probe Name: </label>
+                    <select id="probe_name" name="probe_name" required>
+                    </select>
+                    </br>
+                    </br>
+                    <label>Reservation Length: </label>
+                    <select name="reserve_length" required>
+                        <option>1 Day</option>
+                        <option>2 Days</option>
+                        <option>3 Days</option>
+                        <option>4 Days</option>
+                        <option>5 Days</option>
+                        <option>6 Days</option>
+                        <option>7 Days</option>
+                    </select>
+                    </br>
+                    </br>
+                    <label>Reservation Start Date: </label>
+                    <input id="reserve_start" name="reserve_start" type="date" required>
+                    </br>
+                    </br>
+                    <button type="submit" class="mySmallButton centered">Add Reservation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPDATE POPUP -->
+    <div class="popup">
+        <div class="popuptext" id="updatePopup">
+            <p id="closeUpdateReservationForm" class="closeform-btn">X</p>
+            <div>
+                <p class="centered">Please Edit Your Reservation's Name Below:</p>
+                <form action="/updateReservation" id="reservationRecord" class="niu">
+                    <input id="reservation_id" name="reservation_id" type="hidden">
+                    <label>University Name: </label>
+                    <select id="updateUniversityName" name="university_name" required>
+                    </select>
+                    </br>
+                    </br>
+                    <label>Probe Name: </label>
+                    <select id="updateProbeName" name="probe_name" required>
+                    </select>
+                    </br>
+                    </br>
+                    <label>Reservation Length: </label>
+                    <select id="updateReserveLength" name="reserve_length" required>
+                    </select>
+                    </br>
+                    </br>
+                    <label>Reservation Start Date: </label>
+                    <input id="updateReserveStart" name="reserve_start" type="date" required>
+                    </br>
+                    </br>
+                    <button type="submit" class="mySmallButton centered">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search POPUP -->
+    <div class="popup">
+        <div class="popuptext" id="searchPopup">
+            <p id="closeSearchReservationForm" class="closeform-btn">X</p>
+            <div id="searchRecord" class="niu">
+                <p class="centered">Search in Reservations Below:</p>
+                <form id="reservationSearchForm" action="/searchReservation">
+                    <select>
+                        <option id="searchOption">Select</option>
+                        <option value="reservation_id">Reservation ID</option>
+                        <option value="probe_id">Probe ID</option>
+                        <option value="university_id">University ID</option>
+                    </select>
+                    <select>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                    </br>
+                    <button type="submit" class="mySmallButton centered">Search</button>
+                </form>
+            </div>  
+        </div>
+    </div>
+
+    <!-- CLICK OPENS NAV -->
+    <div style="background-color: grey; height: 50px; margin-top: -19px;"></div>
+    <img style="float: left; margin-top: -56px; height: 50px; cursor: pointer;" id="menupng" src="/images/menu-icon.png">
+
+    <!-- SIDENAV BEGIN-->
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div id="topSelect">
+            <a href="./index.html" class="mySmallButton centered">Home</a>
+            <a href="./reservations.html" class="mySmallButton centered">Reservations</a>
+            <a href="./universities.html" class="mySmallButton centered">Universities</a>
+            <a href="./probes.html" class="mySmallButton centered">Probes</a>
+            <a href="./relays.html" class="mySmallButton centered">Relays</a>
+            <a href="./asteroids.html" class="mySmallButton centered">Asteroids</a>
+            <a href="./relaysprobes.html" class="mySmallButton centered">Relays/Probes</a>
+        </div>
+    </div>
+    <!-- SIDENAV END -->
+    
+    <!-- HEADER BEGIN -->
+    <div id="header">
+        <div style="height: 100px; background-color: #226bc5; border-width: 8px; border-style: solid; margin-left: 0px; margin-right: 0px; top: 0;"></div>
+        <img src="/images/StarGazersLogo.png" style="float: right; margin-top: -115px; margin-right: 8px; width: 99px; height: 99px;">
+        <p style="float: left; color: yellow; font-size: 50px; font-family: Arial, Helvetica, sans-serif; margin-top: -90px; margin-left: 20px;">STAR GAZERS NETWORK</p>
+    </div>
+    <!-- HEADER END -->
+
+    <!-- BUTTONS TO OPEN VARIOUS POPUPS-->
+    <div id="menu" class="centered" style="padding: 10px;">
+        <h3 id="showNewReservationForm" class="mySmallButton centered" style="margin-bottom: 10px;">Create New Reservation</h3>
+        <h3 id="openSearch" class="mySmallButton centered hidden" style="padding-top: 15px; height: 40px;">Search</h3> <!-- Search will open another menu with more options to search (i.e. by phone, email, name, etc...) -->
+    </div>
+
+    <!-- CREATES A TABLE -->
+    <h1 class="centered" style="margin-top: 25px;">Reservations</h1>
+    <table id="reservationTable" class="centered">
+        <thead>
+            <th>Reservation ID</th>
+            <th>University Name</th>
+            <th>Probe Name</th>
+            <th>Scheduled Reservation Length</th>
+            <th>Reservation Start Date</th>
+            <th>Delete/Edit</th>
+        </thead>
+        <tbody id="reservationTableBody" class=''></tbody>
+    </table>
+    <h2 id="empty" class="hidden">There are currently no reservations in this database</h2>
+    
+    <!-- Showcases Attributed Material. -->
+    <p>Attributions:</p>
+    <a href="https://www.flaticon.com/free-icons/delete" title="delete icons">Delete icons created by bqlqn - Flaticon</a>
+    </br>
+    <a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons">Pencil icons created by bqlqn - Flaticon</a>
+</body>
+
+
+<script>
+    // CONST VARIABLES //
+    const showNewReservationForm = document.getElementById('showNewReservationForm');
+    const closeNewReservationForm = document.getElementById('closeNewReservationForm');
+    const openSearch = document.getElementById('openSearch');
+    const closeSearch = document.getElementById('closeSearch');
+    let tbody = document.getElementById('reservationTableBody');
+    const searchTBody = document.getElementById('searchTableBody');
+    const reservationRecord = document.getElementById('reservationRecord');
+    const closeUpdateReservationForm = document.getElementById('closeUpdateReservationForm');
+    const university_name = document.getElementById('university_name');
+    const probe_name = document.getElementById('probe_name');
+    const updateUniversityName = document.getElementById('updateUniversityName');
+    const updateProbeName = document.getElementById('updateProbeName');
+    const updateReserveLength = document.getElementById('updateReserveLength');
+    const updateReserveStart = document.getElementById('updateReserveStart');
+    const reserve_start = document.getElementById('reserve_start');
+    const reservation_id = document.getElementById('reservation_id');
+
+    // FUNCTIONS //
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        };
+
+        /* Set the width of the side navigation to 0 */
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        };
+
+        function fillTable (tableArray) {
+            for (let i = 0; i < tableArray.length; i++){
+                let newRow = '<tr><td>' + tableArray[i].reservation_id + '</td><td>' + tableArray[i].university_name + '</td><td>' + tableArray[i].probe_name + '</td><td>' + tableArray[i].reserve_length + ' Days</td><td>' + tableArray[i].reserve_start.slice(0, 10) + '</td>'
+                const tail = '<td><img id="' + 'remv' + tableArray[i].reservation_id + '" src="/images/trash.png" style="height: 25px; margin-right: 25px; cursor: pointer;"><img id="' + 'edit' + tableArray[i].reservation_id + '" src="/images/pencil.png" style="height: 25px; cursor: pointer;"></td></tr>';
+                newRow += tail
+                tbody.innerHTML += newRow
+            };
+        };
+
+        function fillCreatePopup () {
+            university_name.innerHTML = '<option>Select</option>';
+            getTable('/getUniversity', fillDropdown, university_name);
+            probe_name.innerHTML = '<option>Select</option>';
+            getTable('/getProbe', fillDropdown, probe_name)
+        };
+
+        function fillUpdatePopup (reservation) {
+            reservation_id.value = reservation[0].reservation_id;
+            updateUniversityName.innerHTML = "<option>" + reservation[0].university_name + "</option>"
+            getTable('/getUniversity', fillDropdown, updateUniversityName);
+            updateProbeName.innerHTML = "<option>" + reservation[0].probe_name + "</option>";
+            getTable('/getProbe', fillDropdown, updateProbeName);
+            updateReserveLength.innerHTML = "<option>" + reservation[0].reserve_length + " Days</option>"
+            for (let i = 1; i < 8; i++){
+                updateReserveLength.innerHTML += "<option>" + i + " Days</option>"
+            }
+            updateReserveStart.value = reservation[0].reserve_start.slice(0, 10);
+        };
+
+        function fillDropdown(tableArray, element) {
+            if (element == university_name || element == updateUniversityName){
+                for (let i = 0; i < tableArray.length; i++){
+                    element.innerHTML += "<option>" + tableArray[i].university_name + "</option>";
+                }
+            } if (element == probe_name || element == updateProbeName){
+                for (let i = 0; i < tableArray.length; i++){
+                    element.innerHTML += "<option>" + tableArray[i].probe_name + "</option>";
+                }
+            }
+        };
+
+
+    // EVENT LISTENERS //
+
+        // This opens popup form to add new "Reservation" to db.
+        showNewReservationForm.addEventListener('click', () => {
+            const insertPopup = document.getElementById("insertPopup");
+            insertPopup.classList.toggle("show");
+        });
+
+        // This closes the new "Reservation" popup form when X in corner is clicked.
+        closeNewReservationForm.addEventListener('click', () => {
+            const insertPopup = document.getElementById("insertPopup");
+            insertPopup.classList.toggle("show");
+        });
+
+        // This opens popup form to search for existing "Reservation" in db.
+        openSearch.addEventListener('click', () => {
+            const searchPopup = document.getElementById("searchPopup");
+            searchPopup.classList.toggle("show");
+        });
+
+        // This closes the search "Reservation" popup form when X in corner is clicked.
+        closeSearchReservationForm.addEventListener('click', () => {
+            const searchPopup = document.getElementById("searchPopup");
+            searchPopup.classList.toggle("show");
+        });
+
+        // This closes the update "Reservation" popup form when X in corner is clicked.
+        closeUpdateReservationForm.addEventListener('click', () => {
+            const updatePopup = document.getElementById("updatePopup");
+            updatePopup.classList.toggle("show");
+        });
+
+        document.addEventListener("click", function(e){
+            // Listen for a click on an <img> element
+            if(e.target && e.target.nodeName== 'IMG') {
+            // Do something based on id attribute of the clicked element 
+                if(e.target.getAttribute('id') == 'menupng'){
+                    openNav();
+                } if(e.target.getAttribute('id').substring(0, 4) == 'remv'){
+                    // Remove first four characters from ID string and send to delete function
+                    postReservation('/deleteReservation', parseInt(e.target.getAttribute('id').substring(4, e.target.getAttribute('id').length)));
+                    location.reload()
+                } if(e.target.getAttribute('id').substring(0, 4) == 'edit'){
+                    postReservation('/getReservationById', parseInt(e.target.getAttribute('id').substring(4, e.target.getAttribute('id').length)), fillUpdatePopup);
+                    const updatePopup = document.getElementById("updatePopup");
+                    updatePopup.classList.toggle("show");
+                } if(e.target.getAttribute('id').substring(0, 4) == 'sear'){
+                    // Remove first four characters from ID string and send to update function
+                    findRowByID(e.target.getAttribute('id').substring(4), searchTBody);
+                }
+            }
+        });
+
+    // XHR FUNCTIONS //
+    function getTable(route, nextFunc, extra1 = 0) {
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = route;
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                if (extra1 == 0) {
+                    nextFunc(JSON.parse(this.responseText));
+                } else {
+                    nextFunc(JSON.parse(this.responseText), extra1);
+                }
+            }
+        }
+        // Sending our request 
+        xhr.send();
+    }
+
+
+    function postReservation(route, data, nextFunc = 0, extra = 0){
+        console.log(extra)
+        // Creating an XHR object
+        const xhr = new XMLHttpRequest();
+        // open a connection
+        xhr.open("POST", route);
+        // Set the request header
+        xhr.setRequestHeader(
+        "Content-Type", "application/json"
+        );
+        // Send request
+        var data = JSON.stringify(
+            { data: data }
+        );
+        xhr.send(data);
+        // Create a state change callback
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 &&
+                xhr.status === 200) {
+                if (nextFunc !== 0){
+                    nextFunc(JSON.parse(this.responseText));
+                } else {
+                    location.reload()
+                }
+            }        
+        }
+    }
+
+
+</script>
+
+</html>

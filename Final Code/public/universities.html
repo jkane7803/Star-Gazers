@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Universities</title>
+    <link href="app.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="/images/StarGazersLogo.png">
+</head>
+
+<body onload="getUniversity(fillTable)">
+
+    <!-- INSERT POPUP -->
+    <div class="popup">
+        <div class="popuptext" id="insertPopup">
+            <p id="closeNewUniversityForm" class="closeform-btn">X</p>
+            <div id="newUniversityRecord" class="niu">
+                <p class="centered">Please Enter Your University's Name Below:</p>
+                <form id="universityInputForm" action="/insertUniversity">
+                    <input type="text" name="university_name" placeholder="University Name">
+                    </br>
+                    <button type="submit" class="mySmallButton centered">Add University</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPDATE POPUP -->
+    <div class="popup">
+        <div class="popuptext" id="updatePopup">
+            <p id="closeUpdateUniversityForm" class="closeform-btn">X</p>
+            <div>
+                <p class="centered">Please Edit Your University's Name Below:</p>
+                <form action="/updateUniversity" id="universityRecord" style="padding-top: 20px; padding-bottom: 20px; margin: 30px; background-color: #989898; border-radius: 5px;">
+                    <input id="university_id" name="university_id" type="hidden">
+                    <input id="updateUniversityName" type="text" name="university_name" placeholder="University Name">
+                    </br>
+                    <button type="submit" class="mySmallButton centered">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- CLICK OPENS NAV -->
+    <div style="background-color: grey; height: 50px; margin-top: -19px;"></div>
+    <img style="float: left; margin-top: -56px; height: 50px; cursor: pointer;" id="menupng" src="/images/menu-icon.png">
+
+    <!-- SIDENAV BEGIN-->
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div id="topSelect">
+            <a href="./index.html" class="mySmallButton centered">Home</a>
+            <a href="./reservations.html" class="mySmallButton centered">Reservations</a>
+            <a href="./universities.html" class="mySmallButton centered">Universities</a>
+            <a href="./probes.html" class="mySmallButton centered">Probes</a>
+            <a href="./relays.html" class="mySmallButton centered">Relays</a>
+            <a href="./asteroids.html" class="mySmallButton centered">Asteroids</a>
+            <a href="./relaysprobes.html" class="mySmallButton centered">Relays/Probes</a>
+        </div>
+    </div>
+    <!-- SIDENAV END -->
+
+    <!-- HEADER BEGIN -->
+    <div id="header">
+        <div style="height: 100px; background-color: #226bc5; border-width: 8px; border-style: solid; margin-left: 0px; margin-right: 0px; top: 0;"></div>
+        <img src="/images/StarGazersLogo.png" style="float: right; margin-top: -115px; margin-right: 8px; width: 99px; height: 99px;">
+        <p style="float: left; color: yellow; font-size: 50px; font-family: Arial, Helvetica, sans-serif; margin-top: -90px; margin-left: 20px;">STAR GAZERS NETWORK</p>
+    </div>
+    <!-- HEADER END -->
+
+    <!-- BUTTONS TO OPEN VARIOUS POPUPS-->
+    <div id="menu" class="centered" style="padding: 10px;">
+        <h3 id="showNewUniversityForm" class="mySmallButton centered" style="margin-bottom: 10px;">Add New University</h3>
+    </div>
+
+    <!-- CREATES A TABLE -->
+    <h1 class="centered" style="margin-top: 25px;">Universities</h1>
+    <table id="universityTable" class="centered">
+        <thead>
+            <th>University ID</th>
+            <th>Name</th>
+            <th>Delete/Edit</th>
+        </thead>
+        <tbody id="universityTableBody" class=''></tbody>
+    </table>
+    <h2 id="empty" class="hidden">There are currently no customers in this database</h2>
+    
+    <!-- Showcases Attributed Material. -->
+    <p>Attributions:</p>
+    <a href="https://www.flaticon.com/free-icons/delete" title="delete icons">Delete icons created by bqlqn - Flaticon</a>
+    </br>
+    <a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons">Pencil icons created by bqlqn - Flaticon</a>
+</body>
+
+<script>
+    // CONST VARIABLES //
+    const showNewUniversityForm = document.getElementById('showNewUniversityForm');
+    const closeNewUniversityForm = document.getElementById('closeNewUniversityForm');
+    const openSearch = document.getElementById('openSearch');
+    const closeSearch = document.getElementById('closeSearch');
+    let tbody = document.getElementById('universityTableBody');
+    const searchTBody = document.getElementById('searchTableBody');
+    const universityRecord = document.getElementById('universityRecord');
+    const closeUpdateUniversityForm = document.getElementById('closeUpdateUniversityForm');
+    const updateUniversityName = document.getElementById('updateUniversityName');
+    const university_id = document.getElementById('university_id');
+
+
+    // FUNCTIONS //
+        /* Set the width of the side navigation to 0. */
+        function closeNav() {
+           document.getElementById("mySidenav").style.width = "0";
+        };
+    
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        };
+
+        function fillTable (tableArray) {
+            for (let i = 0; i < tableArray.length; i++){
+                let newRow = '<tr><td>' + tableArray[i].university_id + '</td><td>' + tableArray[i].university_name + '</td>'
+                const tail = '<td><img id="' + 'remv' + tableArray[i].university_id + '" src="/images/trash.png" style="height: 25px; margin-right: 25px; cursor: pointer;"><img id="' + 'edit' + tableArray[i].university_id + '" src="/images/pencil.png" style="height: 25px; cursor: pointer;"></td></tr>';
+                newRow += tail
+                tbody.innerHTML += newRow
+            };
+        };
+
+        function fillUpdatePopup (university) {
+            university_id.value = university[0].university_id;
+            updateUniversityName.value = university[0].university_name;
+        };
+
+
+    // EVENT LISTENERS //
+
+        // This opens popup form to add new "University" to db.
+        showNewUniversityForm.addEventListener('click', () => {
+            const insertPopup = document.getElementById("insertPopup");
+            insertPopup.classList.toggle("show");
+        });
+
+        // This closes the new "University" popup form when X in corner is clicked.
+        closeNewUniversityForm.addEventListener('click', () => {
+            const insertPopup = document.getElementById("insertPopup");
+            insertPopup.classList.toggle("show");
+        });
+
+        // This closes the update "University" popup form when X in corner is clicked.
+        closeUpdateUniversityForm.addEventListener('click', () => {
+            const updatePopup = document.getElementById("updatePopup");
+            updatePopup.classList.toggle("show");
+        });
+
+        document.addEventListener("click", function(e){
+            // Listen for a click on an <img> element
+            if(e.target && e.target.nodeName== 'IMG') {
+            // Do something based on id attribute of the clicked element 
+                if(e.target.getAttribute('id') == 'menupng'){
+                    openNav();
+                } if(e.target.getAttribute('id').substring(0, 4) == 'remv'){
+                    // Remove first four characters from ID string and send to delete function
+                    postUniversity('/deleteUniversity', parseInt(e.target.getAttribute('id').substring(4, e.target.getAttribute('id').length)));
+                } if(e.target.getAttribute('id').substring(0, 4) == 'edit'){
+                    postUniversity('/getUniversityById', parseInt(e.target.getAttribute('id').substring(4, e.target.getAttribute('id').length)), fillUpdatePopup);
+                    const updatePopup = document.getElementById("updatePopup");
+                    updatePopup.classList.toggle("show");
+                } 
+            }
+        });
+
+    // XHR FUNCTIONS //
+    function getUniversity(nextFunc) {
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = '/getUniversity';
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                nextFunc(JSON.parse(this.responseText));
+            }
+        }
+        // Sending our request 
+        xhr.send();
+    }
+
+
+    function postUniversity(route, data, nextFunc = 0, extra = 0){
+        // Creating an XHR object
+        const xhr = new XMLHttpRequest();
+        // open a connection
+        xhr.open("POST", route);
+        // Set the request header
+        xhr.setRequestHeader(
+        "Content-Type", "application/json"
+        );
+        // Send request
+        var data = JSON.stringify(
+            { data: data }
+        );
+        xhr.send(data);
+        // Create a state change callback
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 &&
+                xhr.status === 200) {
+                if (nextFunc !== 0){
+                    nextFunc(JSON.parse(this.responseText));
+                } else {
+                    location.reload()
+                }
+            } 
+        }
+    }
+
+                    
+</script>
+
+</html>

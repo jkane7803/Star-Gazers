@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Relays</title>
+    <link href="app.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="/images/StarGazersLogo.png">
+</head>
+
+<body onload="getTable('/getRelay', fillTable), getTable('/getUniversity', fillInsertPopup), getTable('/getProbe', fillUpdateProbeDropdown), getTable('/getProbe', fillInsertProbeDropdown)">
+
+    <!-- INSERT POPUP -->
+    <div class="popup">
+        <div class="popuptext" id="insertPopup">
+            <p id="closeNewRelayForm" class="closeform-btn">X</p>
+            <div id="newRelayRecord" class="niu">
+                <p class="centered">Please Enter Your Relay Details Below:</p>
+                <form id="relayInputForm" action="/insertRelay">
+                    <label>Relay Name: </label>
+                    <input type="text" name="relay_name" placeholder="Relay Name" required>
+                    </br>
+                    </br>
+                    <label>Location: </label>
+                    <input type="text" name="where_installed" placeholder="Location" requried>
+                    </br>
+                    </br>
+                    <label>Outgoing Probe Connection: </label>
+                    <select id="selectProbe" type="text" name="connected_probe" required>
+                    </select>
+                    </br>
+                    </br>
+                    <label>Connected University: </label>
+                    <select id="selectUniversity" type="text" name="sends_to" required>
+                    </select>
+                    </br>
+                    </br>
+                    <button type="submit" class="mySmallButton centered">Add Relay</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPDATE POPUP -->
+    <div class="popup">
+        <div class="popuptext" id="updatePopup">
+            <p id="closeUpdateRelayForm" class="closeform-btn">X</p>
+            <div>
+                <p class="centered">Please Edit Your Relay's Name Below:</p>
+                <form action="/updateRelay" id="relayRecord" class="niu">
+                    <input id="relay_id" name="relay_id" type="hidden">
+                    <label>Relay Name: </label>
+                    <input id="updateRelayName" name="relay_name" type="text" placeholder="Relay Name" required>
+                    </br>
+                    </br>
+                    <label>Location: </label>
+                    <input id="updateWhereInstalled" name="where_installed" type="text" placeholder="Location" required>
+                    </br>
+                    </br>
+                    <label>Outgoing Probe Connection: </label>
+                    <select id="updateSelectProbe" type="text" name="connected_probe" required>
+                    </select>
+                    </br>
+                    </br>
+                    <label>Connected University: </label>
+                    <select id="updateSendsTo" id="sends_to" name="sends_to" required>
+                    </select>
+                    </br>
+                    </br>
+                    <button type="submit" class="mySmallButton centered">Update Relay</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CLICK OPENS NAV -->
+    <div style="background-color: grey; height: 50px; margin-top: -19px;"></div>
+    <img style="float: left; margin-top: -56px; height: 50px; cursor: pointer;" id="menupng" src="/images/menu-icon.png">
+
+    <!-- SIDENAV BEGIN-->
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div id="topSelect">
+            <a href="./index.html" class="mySmallButton centered">Home</a>
+            <a href="./reservations.html" class="mySmallButton centered">Reservations</a>
+            <a href="./universities.html" class="mySmallButton centered">Universities</a>
+            <a href="./probes.html" class="mySmallButton centered">Probes</a>
+            <a href="./relays.html" class="mySmallButton centered">Relays</a>
+            <a href="./asteroids.html" class="mySmallButton centered">Asteroids</a>
+            <a href="./relaysprobes.html" class="mySmallButton centered">Relays/Probes</a>
+        </div>
+    </div>
+    <!-- SIDENAV END -->
+    
+    <!-- HEADER BEGIN -->
+    <div id="header">
+        <div style="height: 100px; background-color: #226bc5; border-width: 8px; border-style: solid; margin-left: 0px; margin-right: 0px; top: 0;"></div>
+        <img src="/images/StarGazersLogo.png" style="float: right; margin-top: -115px; margin-right: 8px; width: 99px; height: 99px;">
+        <p style="float: left; color: yellow; font-size: 50px; font-family: Arial, Helvetica, sans-serif; margin-top: -90px; margin-left: 20px;">STAR GAZERS NETWORK</p>
+    </div>
+    <!-- HEADER END -->
+
+    <!-- BUTTONS TO OPEN VARIOUS POPUPS-->
+    <div id="menu" class="centered" style="padding: 10px;">
+        <h3 id="showNewRelayForm" class="mySmallButton centered" style="margin-bottom: 10px; padding-top: 15px; height: 40px;">Create New Relay</h3>
+        <h3 id="openSearch" class="mySmallButton centered hidden" style="padding-top: 15px; height: 40px;">Search</h3> <!-- Search will open another menu with more options to search (i.e. by phone, email, name, etc...) -->
+    </div>
+
+    <!-- CREATES A TABLE -->
+    <h1 class="centered" style="margin-top: 25px;">Relays</h1>
+    <table id="relayTable" class="centered">
+        <thead>
+            <th>Relay ID</th>
+            <th>Relay Name</th>
+            <th>Location</th>
+            <th>Sending Data To</th>
+            <th>Delete/Edit</th>
+        </thead>
+        <tbody id="relayTableBody" class=''></tbody>
+    </table>
+    <h2 id="empty" class="hidden">There are currently no Relays in this database</h2>
+
+    <!-- Showcases Attributed Material. -->
+    <p>Attributions:</p>
+    <a href="https://www.flaticon.com/free-icons/delete" title="delete icons">Delete icons created by bqlqn - Flaticon</a>
+    </br>
+    <a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons">Pencil icons created by bqlqn - Flaticon</a>
+</body>
+
+
+<script>
+    // CONST VARIABLES //
+    const showNewRelayForm = document.getElementById('showNewRelayForm');
+    const closeNewRelayForm = document.getElementById('closeNewRelayForm');
+    let tbody = document.getElementById('relayTableBody');
+    const relayRecord = document.getElementById('relayRecord');
+    const closeUpdateRelayForm = document.getElementById('closeUpdateRelayForm');
+    const selectUniversity = document.getElementById('selectUniversity');
+    const updateSendsTo = document.getElementById('updateSendsTo');
+    const updateRelayName = document.getElementById('updateRelayName');
+    const updateWhereInstalled = document.getElementById('updateWhereInstalled');
+    const relay_id = document.getElementById('relay_id');
+
+    // FUNCTIONS //
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        };
+
+        /* Set the width of the side navigation to 0 */
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        };
+
+        function fillTable (tableArray) {
+            for (let i = 0; i < tableArray.length; i++){
+                let newRow = '<tr><td>' + tableArray[i].relay_id + '</td><td>' + tableArray[i].relay_name + '</td><td>' + tableArray[i].where_installed + '</td>';
+                let sendsTo = tableArray[i].sends_to
+                if (sendsTo == null) {
+                    sendsTo = 'Not Connected'
+                } else {
+                    sendsTo = tableArray[i].university_name;
+                }
+                let connected = '<td>' + sendsTo + '</td>';    
+                const tail = '<td><img id="' + 'remv' + tableArray[i].relay_id + '" src="/images/trash.png" style="height: 25px; margin-right: 25px; cursor: pointer;"><img id="' + 'edit' + tableArray[i].relay_id + '" src="/images/pencil.png" style="height: 25px; cursor: pointer;"></td></tr>';
+                newRow += connected
+                newRow += tail
+                tbody.innerHTML += newRow
+            };
+        };
+
+        function fillInsertPopup (universities) {
+            // reset to thwart stacking
+            selectUniversity.innerHTML = null;
+            // fill element
+            selectUniversity.innerHTML += "<option>Select</option>";
+            for (let i = 0; i < universities.length; i++){
+                selectUniversity.innerHTML += "<option>" + universities[i].university_name + "</option>"
+            }
+        }
+
+        function fillUpdatePopup (relays) {
+            relay_id.value = relays[0].relay_id;
+            let uName = relays[0].university_name;
+            if (uName == null){
+                uName = 'Not Connected';
+            }
+            updateSendsTo.innerHTML = "<option>" + uName + "</option>"
+            getTable('/getUniversity', fillUpdateDropdown)
+            updateRelayName.value = relays[0].relay_name;
+            updateWhereInstalled.value = relays[0].where_installed;
+        }
+
+        function fillUpdateDropdown (universities) {
+            for (let i = 0; i < universities.length; i++){
+                updateSendsTo.innerHTML += "<option>" + universities[i].university_name + "</option>";
+            }
+        };
+
+        function fillInsertProbeDropdown (entityArray) {
+            selectProbe.innerHTML = null;
+            for (let i = 0; i < entityArray.length; i++){
+                selectProbe.innerHTML += "<option>" + entityArray[i].probe_name + "</option>"
+            }
+        };
+
+        function fillUpdateProbeDropdown (entityArray) {
+            updateSelectProbe.innerHTML = null;
+            for (let i = 0; i < entityArray.length; i++){
+                updateSelectProbe.innerHTML += "<option>" + entityArray[i].probe_name + "</option>"
+            }
+        };
+
+    // EVENT LISTENERS //
+
+        // This opens popup form to add new "Relay" to db.
+        showNewRelayForm.addEventListener('click', () => {
+            const insertPopup = document.getElementById("insertPopup");
+            insertPopup.classList.toggle("show");
+        });
+
+        // This closes the new "Relay" popup form when X in corner is clicked.
+        closeNewRelayForm.addEventListener('click', () => {
+            const insertPopup = document.getElementById("insertPopup");
+            insertPopup.classList.toggle("show");
+        });
+
+        // This closes the update "Relay" popup form when X in corner is clicked.
+        closeUpdateRelayForm.addEventListener('click', () => {
+            const updatePopup = document.getElementById("updatePopup");
+            updatePopup.classList.toggle("show");
+        });
+
+        document.addEventListener("click", function(e){
+            // Listen for a click on an <img> element
+            if(e.target && e.target.nodeName== 'IMG') {
+            // Do something based on id attribute of the clicked element 
+                if(e.target.getAttribute('id') == 'menupng'){
+                    openNav();
+                } if(e.target.getAttribute('id').substring(0, 4) == 'remv'){
+                    // Remove first four characters from ID string and send to delete function
+                    postRelay('/deleteRelay', parseInt(e.target.getAttribute('id').substring(4, e.target.getAttribute('id').length)));
+                } if(e.target.getAttribute('id').substring(0, 4) == 'edit'){
+                    postRelay('/getRelayById', parseInt(e.target.getAttribute('id').substring(4, e.target.getAttribute('id').length)), fillUpdatePopup);
+                    const updatePopup = document.getElementById("updatePopup");
+                    updatePopup.classList.toggle("show");
+                } 
+            }
+        });
+
+    // XHR FUNCTIONS //
+    function getTable(route, nextFunc) {
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = route;
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                nextFunc(JSON.parse(this.responseText));
+            }
+        }
+        // Sending our request 
+        xhr.send();
+    }
+
+
+    function postRelay(route, data, nextFunc = 0, extra = 0){
+        // Creating an XHR object
+        const xhr = new XMLHttpRequest();
+        // open a connection
+        xhr.open("POST", route);
+        // Set the request header
+        xhr.setRequestHeader(
+        "Content-Type", "application/json"
+        );
+        // Send request
+        var data = JSON.stringify(
+            { data: data }
+        );
+        xhr.send(data);
+        // Create a state change callback
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 &&
+                xhr.status === 200) {
+                if (nextFunc !== 0){
+                    nextFunc(JSON.parse(this.responseText));
+                } else {
+                    location.reload()
+                }
+            }        
+        }
+    }
+
+
+</script>
+
+</html>

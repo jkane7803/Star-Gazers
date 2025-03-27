@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Relays/Probes Intersect</title>
+    <link href="app.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="/images/StarGazersLogo.png">
+</head>
+
+<body onload="getRelaysProbes()" style="margin-top: 27px;">
+
+    <!-- CLICK OPENS NAV -->
+    <div style="background-color: grey; height: 50px; margin-top: -19px;"></div>
+    <img style="float: left; margin-top: -56px; height: 50px; cursor: pointer;" id="menupng" src="/images/menu-icon.png">
+
+    <!-- SIDENAV BEGIN-->
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div id="topSelect">
+            <a href="./index.html" class="mySmallButton centered">Home</a>
+            <a href="./reservations.html" class="mySmallButton centered">Reservations</a>
+            <a href="./universities.html" class="mySmallButton centered">Universities</a>
+            <a href="./probes.html" class="mySmallButton centered">Probes</a>
+            <a href="./relays.html" class="mySmallButton centered">Relays</a>
+            <a href="./asteroids.html" class="mySmallButton centered">Asteroids</a>
+            <a href="./relaysprobes.html" class="mySmallButton centered">Relays/Probes</a>
+        </div>
+    </div>
+    <!-- SIDENAV END -->
+    
+    <!-- HEADER BEGIN -->
+    <div id="header">
+        <div style="height: 100px; background-color: #226bc5; border-width: 8px; border-style: solid; margin-left: 0px; margin-right: 0px; top: 0;"></div>
+        <img src="/images/StarGazersLogo.png" style="float: right; margin-top: -115px; margin-right: 8px; width: 99px; height: 99px;">
+        <p style="float: left; color: yellow; font-size: 50px; font-family: Arial, Helvetica, sans-serif; margin-top: -90px; margin-left: 20px;">STAR GAZERS NETWORK</p>
+    </div>
+    <!-- HEADER END -->
+
+    <!-- BUTTONS TO OPEN VARIOUS POPUPS-->
+    <div id="menu" class="centered" style="padding: 10px;">
+        <h3 id="showNewRelaysProbesForm" class="mySmallButton centered hidden" style="margin-bottom: 10px;">Add New RelaysProbes</h3>
+        <h3 id="openSearch" class="mySmallButton centered hidden" style="padding-top: 15px; height: 40px;">Search</h3> <!-- Search will open another menu with more options to search (i.e. by phone, email, name, etc...) -->
+    </div>
+
+    <!-- CREATES A TABLE -->
+    <h1 class="centered" style="margin-top: 25px;">Relays/Probes</h1>
+    <table id="universityTable" class="centered">
+        <thead>
+            <th>Probe Name</th>
+            <th>Relay Name</th>
+            <!--<th>Delete/Edit</th>-->
+        </thead>
+        <tbody id="universityTableBody" class=''></tbody>
+    </table>
+    <h2 id="empty" class="hidden">There are currently no universities in this database</h2>
+
+    <!-- Showcases Attributed Material. -->
+    <p>Attributions:</p>
+    <a href="https://www.flaticon.com/free-icons/delete" title="delete icons">Delete icons created by bqlqn - Flaticon</a>
+    </br>
+    <a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons">Pencil icons created by bqlqn - Flaticon</a>
+</body>
+
+
+<script>
+    // CONST VARIABLES //
+    const showNewRelaysProbesForm = document.getElementById('showNewRelaysProbesForm');
+    const closeNewRelaysProbesForm = document.getElementById('closeNewRelaysProbesForm');
+    const openSearch = document.getElementById('openSearch');
+    const closeSearch = document.getElementById('closeSearch');
+    let tbody = document.getElementById('universityTableBody');
+    const searchTBody = document.getElementById('searchTableBody');
+    const universityRecord = document.getElementById('universityRecord');
+    const closeUpdateRelaysProbesForm = document.getElementById('closeUpdateRelaysProbesForm');
+
+    // FUNCTIONS //
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        };
+
+        /* Set the width of the side navigation to 0 */
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        };
+
+        function fillTable (tableArray) {
+            for (let i = 0; i < tableArray.length; i++){
+                let newRow = '<tr><td>' + tableArray[i].probe_name + '</td><td>' + tableArray[i].relay_name + '</td>';
+                tbody.innerHTML += newRow;
+            };
+        };
+
+    // EVENT LISTENERS //
+
+        document.addEventListener("click", function(e){
+            // Listen for a click on an <img> element
+            if(e.target && e.target.nodeName== 'IMG') {
+            // Do something based on id attribute of the clicked element 
+                if(e.target.getAttribute('id') == 'menupng'){
+                    openNav();
+                } if(e.target.getAttribute('id').substring(0, 4) == 'remv'){
+                    // Remove first four characters from ID string and send to delete function
+                    deleteRow(e.target.getAttribute('id').substring(4));
+                } if(e.target.getAttribute('id').substring(0, 4) == 'edit'){
+                    const updatePopup = document.getElementById("updatePopup");
+                    updatePopup.classList.toggle("show");
+                } if(e.target.getAttribute('id').substring(0, 4) == 'sear'){
+                    // Remove first four characters from ID string and send to update function
+                    findRowByID(e.target.getAttribute('id').substring(4), searchTBody);
+                }
+            } 
+        });
+
+    // XHR FUNCTIONS //
+    function getRelaysProbes() {
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = '/getRelaysProbes';
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                fillTable(JSON.parse(this.responseText));
+                console.log(JSON.parse(this.responseText))
+            }
+        }
+        // Sending our request 
+        xhr.send();
+    }
+
+
+</script>
+
+</html>

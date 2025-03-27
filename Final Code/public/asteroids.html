@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Asteroids</title>
+    <link href="app.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="/images/StarGazersLogo.png">
+</head>
+
+<body onload="getAsteroid(fillTable)">
+    
+    <!-- INSERT POPUP -->
+    <div class="popup">
+        <div class="popuptext" id="insertPopup">
+            <p id="closeNewAsteroidForm" class="closeform-btn">X</p>
+            <div id="newAsteroidRecord" class="niu">
+                <p class="centered">Please Enter Your Asteroid Details Below:</p>
+                <form id="asteroidInputForm" action="/insertAsteroid">
+                    <label>Asteroid Name: </label>
+                    <input type="text" name="asteroid_name" placeholder="Asteroid Name" required>
+                    </br>
+                    </br>
+                    <label>Discovery Date: </label>
+                    <input id="discovery_date" name="discovery_date" type="date" required>
+                    </br>
+                    </br>
+                    <label>Distance From Earth: </label>
+                    <input type="number" name="distance_from_earth" placeholder="Distance in AU" required>
+                    </br>
+                    </br>
+                    <label>Composition: </label>
+                    <input type="text" name="composition" placeholder="Composition Class" required>
+                    </br>
+                    </br>
+                    <label>Is Currently Tracked: </label>
+                    <select name="currently_tracked" required>
+                        <option disabled selected>Select</option>
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                    </br>
+                    </br>
+                    <button type="submit" class="mySmallButton centered">Add Asteroid</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPDATE POPUP -->
+    <div class="popup">
+        <div class="popuptext" id="updatePopup">
+            <p id="closeUpdateAsteroidForm" class="closeform-btn">X</p>
+            <div>
+                <p class="centered">Please Edit Your Asteroid's Name Below:</p>
+                <form action="/updateAsteroid" id="asteroidRecord" class="niu">
+                    <input id="asteroid_id" name="asteroid_id" type="hidden">
+                    <label>Asteroid Name: </label>
+                    <input id="asteroid_name" type="text" name="asteroid_name" placeholder="Asteroid Name" required>
+                    </br>
+                    </br>
+                    <label>Discovery Date: </label>
+                    <input id="updateDiscoveryDate" name="discovery_date" type="date" required>
+                    </br>
+                    </br>
+                    <label>Distance From Earth: </label>
+                    <input id="distance_from_earth" type="text" name="distance_from_earth" placeholder="Distance in AU" required>
+                    </br>
+                    </br>
+                    <label>Composition: </label>
+                    <input id="composition" type="text" name="composition" placeholder="Composition Class" required>
+                    </br>
+                    </br>
+                    <label>Is Currently Tracked: </label>
+                    <select id="currently_tracked" name="currently_tracked" required>
+                        <option disabled selected>Select</option>
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                    </br>
+                    </br>
+                    <button type="submit" class="mySmallButton centered">Update Asteroid</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CLICK OPENS NAV -->
+    <div style="background-color: grey; height: 50px; margin-top: -19px;"></div>
+    <img style="float: left; margin-top: -56px; height: 50px; cursor: pointer;" id="menupng" src="/images/menu-icon.png">
+
+    <!-- SIDENAV BEGIN-->
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div id="topSelect">
+            <a href="./index.html" class="mySmallButton centered">Home</a>
+            <a href="./reservations.html" class="mySmallButton centered">Reservations</a>
+            <a href="./universities.html" class="mySmallButton centered">Universities</a>
+            <a href="./probes.html" class="mySmallButton centered">Probes</a>
+            <a href="./relays.html" class="mySmallButton centered">Relays</a>
+            <a href="./asteroids.html" class="mySmallButton centered">Asteroids</a>
+            <a href="./relaysprobes.html" class="mySmallButton centered">Relays/Probes</a>
+        </div>
+    </div>
+    <!-- SIDENAV END -->
+    
+    <!-- HEADER BEGIN -->
+    <div id="header">
+        <div style="height: 100px; background-color: #226bc5; border-width: 8px; border-style: solid; margin-left: 0px; margin-right: 0px; top: 0;"></div>
+        <img src="/images/StarGazersLogo.png" style="float: right; margin-top: -115px; margin-right: 8px; width: 99px; height: 99px;">
+        <p style="float: left; color: yellow; font-size: 50px; font-family: Arial, Helvetica, sans-serif; margin-top: -90px; margin-left: 20px;">STAR GAZERS NETWORK</p>
+    </div>
+    <!-- HEADER END -->
+
+    <!-- BUTTONS TO OPEN VARIOUS POPUPS-->
+    <div id="menu" class="centered" style="padding: 10px;">
+        <h3 id="showNewAsteroidForm" class="mySmallButton centered" style="margin-bottom: 10px; padding-top: 15px; height: 40px;">Add New Asteroid</h3>
+        <h3 id="openSearch" class="mySmallButton centered hidden" style="padding-top: 15px; height: 40px;">Search</h3> <!-- Search will open another menu with more options to search (i.e. by phone, email, name, etc...) -->
+    </div>
+
+    <!-- CREATES A TABLE -->
+    <h1 class="centered" style="margin-top: 25px;">Asteroids</h1>
+    <table id="asteroidTable" class="centered">
+        <thead>
+            <th>Asteroid ID</th>
+            <th>Asteroid Name</th>
+            <th>Discovery Date</th>
+            <th>Distance From Earth </th>
+            <th>Composition</th>
+            <th>Currently Tracked</th>
+            <th>Delete/Edit</th>
+        </thead>
+        <tbody id="asteroidTableBody" class=''></tbody>
+    </table>
+    <h2 id="empty" class="hidden">There are currently no Asteroids in this database</h2>
+
+    <!-- Showcases Attributed Material. -->
+    <p>Attributions:</p>
+    <a href="https://www.flaticon.com/free-icons/delete" title="delete icons">Delete icons created by bqlqn - Flaticon</a>
+    </br>
+    <a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons">Pencil icons created by bqlqn - Flaticon</a>
+</body>
+
+
+<script>
+    // CONST VARIABLES //
+    const showNewAsteroidForm = document.getElementById('showNewAsteroidForm');
+    const closeNewAsteroidForm = document.getElementById('closeNewAsteroidForm');
+    const openSearch = document.getElementById('openSearch');
+    const closeSearch = document.getElementById('closeSearch');
+    let tbody = document.getElementById('asteroidTableBody');
+    const searchTBody = document.getElementById('searchTableBody');
+    const asteroidRecord = document.getElementById('asteroidRecord');
+    const closeUpdateAsteroidForm = document.getElementById('closeUpdateAsteroidForm');
+    const asteroid_id = document.getElementById('asteroid_id');
+    const asteroid_name = document.getElementById('asteroid_name');
+    const discovery_date = document.getElementById('discovery_date'); 
+    const updateDiscoveryDate = document.getElementById('updateDiscoveryDate');
+    const distance_from_earth = document.getElementById('distance_from_earth');
+    const composition = document.getElementById('composition');
+    const currently_tracked = document.getElementById('currently_tracked');
+
+    // FUNCTIONS //
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        };
+
+        /* Set the width of the side navigation to 0 */
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        };
+
+        function findRowByID (id, tobject) {
+            // for a row in tbody, if the first column's html == id, return that row
+            for(let i = 0; i < tobject.rows.length; i++){
+                if(tobject.rows[i].cells[0].innerHTML == id){
+                    editRowAlt(tobject.rows[i], i, tobject);
+                };
+            };
+        };
+
+        function editRow (row, i, tobj) {
+            // Insert temp row underneath the target row that's been clicked
+            let tempRow = tobj.insertRow(i + 1)
+            let tempData = '<td id="editTempData">Enter New Data =></td><td><input id="newName" value="' + row.cells[1].innerHTML + '"></td><td><input id="newEmail" value="' + row.cells[2].innerHTML + '"></td><td><input id="newPhone" value="' + row.cells[3].innerHTML + '"></td><td><input id="newColor" value="' + row.cells[4].innerHTML + '"></td><td><input id="newSize" value="' + row.cells[5].innerHTML + '"></td><td><input id="newSerial" value="' + row.cells[6].innerHTML + '"></td><td><div id="update" class="mySmallButton">Update</div></td>'
+            tempRow.innerHTML = tempData
+            const update = document.getElementById('update');
+            update.addEventListener('click', () => {
+                updateRow(row.cells[0].innerHTML, tempRow);
+            });
+
+        };
+
+        function fillTable (tableArray) {
+            for (let i = 0; i < tableArray.length; i++){
+                let newRow = '<tr><td>' + tableArray[i].asteroid_id + '</td><td>' + tableArray[i].asteroid_name + '</td><td>' + tableArray[i].discovery_date.slice(0, 10) + '</td><td>' + tableArray[i].distance_from_earth + ' AU</td><td>' + tableArray[i].composition + '</td>';
+                //
+                let currentlyTracked = tableArray[i].currently_tracked;
+                if (currentlyTracked == 1) {
+                    currentlyTracked = 'Yes'
+                } else {currentlyTracked = 'No';}
+                let currentlyTrackedData = '<td>' + currentlyTracked + '</td>'; 
+                const tail = '<td><img id="' + 'remv' + tableArray[i].asteroid_id + '" src="/images/trash.png" style="height: 25px; margin-right: 25px; cursor: pointer;"><img id="' + 'edit' + tableArray[i].asteroid_id + '" src="/images/pencil.png" style="height: 25px; cursor: pointer;"></td></tr>';
+                newRow += currentlyTrackedData                    
+                newRow += tail
+                tbody.innerHTML += newRow
+            };
+        };
+
+        function fillUpdatePopup (asteroidData) {
+            // add parameters so that the values do not stack up on repeated clicks.
+            currently_tracked.innerHTML = null;
+            // fill with new data!
+            asteroid_id.value = asteroidData[0].asteroid_id;
+            asteroid_name.value = asteroidData[0].asteroid_name;
+            updateDiscoveryDate.value = asteroidData[0].discovery_date.slice(0, 10);
+            distance_from_earth.value = asteroidData[0].distance_from_earth;
+            composition.value = asteroidData[0].composition;
+            if (asteroidData[0].currently_tracked == 1){
+                currently_tracked.innerHTML += '<option>Yes</option><option>No</option>';
+            } else {
+                currently_tracked.innerHTML += '<option>No</option><option>Yes</option>';
+            }
+        };
+
+
+    // EVENT LISTENERS //
+
+        // This opens popup form to add new "Asteroid" to db.
+        showNewAsteroidForm.addEventListener('click', () => {
+            const insertPopup = document.getElementById("insertPopup");
+            insertPopup.classList.toggle("show");
+        });
+
+        // This closes the new "Asteroid" popup form when X in corner is clicked.
+        closeNewAsteroidForm.addEventListener('click', () => {
+            const insertPopup = document.getElementById("insertPopup");
+            insertPopup.classList.toggle("show");
+        });
+
+        // This opens popup form to search for existing "Asteroid" in db.
+        openSearch.addEventListener('click', () => {
+            const searchPopup = document.getElementById("searchPopup");
+            searchPopup.classList.toggle("show");
+        });
+
+        // This closes the update "Asteroid" popup form when X in corner is clicked.
+        closeUpdateAsteroidForm.addEventListener('click', () => {
+            const updatePopup = document.getElementById("updatePopup");
+            updatePopup.classList.toggle("show");
+        });
+
+        document.addEventListener("click", function(e){
+            // Listen for a click on an <img> element
+            if(e.target && e.target.nodeName== 'IMG') {
+            // Do something based on id attribute of the clicked element 
+                if(e.target.getAttribute('id') == 'menupng'){
+                    openNav();
+                } if(e.target.getAttribute('id').substring(0, 4) == 'remv'){
+                    // Remove first four characters from ID string and send to delete function
+                    postAsteroid('/deleteAsteroid', parseInt (e.target.getAttribute('id').substring(4, e.target.getAttribute('id').length)));
+                } if(e.target.getAttribute('id').substring(0, 4) == 'edit'){
+                    postAsteroid('/getAsteroidById', parseInt(e.target.getAttribute('id').substring(4, e.target.getAttribute('id').length)), fillUpdatePopup);
+                    const updatePopup = document.getElementById("updatePopup");
+                    updatePopup.classList.toggle("show");
+                }
+            }
+        });
+
+    // XHR FUNCTIONS //
+    function getAsteroid(nextFunc) {
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = '/getAsteroid';
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                nextFunc(JSON.parse(this.responseText));
+            }
+        }
+        // Sending our request 
+        xhr.send();
+    }
+
+
+    function postAsteroid(route, data, nextFunc = 0){
+        // Creating an XHR object
+        const xhr = new XMLHttpRequest();
+        // open a connection
+        xhr.open("POST", route);
+        // Set the request header
+        xhr.setRequestHeader(
+        "Content-Type", "application/json"
+        );
+        // Send request
+        var data = JSON.stringify(
+            { data: data }
+        );
+        xhr.send(data);
+        // Create a state change callback
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 &&
+                xhr.status === 200) {
+                if (nextFunc !== 0){
+                    nextFunc(JSON.parse(this.responseText));
+                } else {
+                    location.reload()
+                }
+            }     
+        }
+    };
+
+
+</script>
+
+</html>

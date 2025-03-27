@@ -1,0 +1,325 @@
+
+/* POPUP: */
+
+/* Sets the style for the entire "popup" container. */
+.popup {
+    position: relative;
+    display: inline-block;
+}
+  
+/* Sets the style for the properties inside the popup (appears on top). [Pop-Up Archetype] */
+/* The pop-up is hidden by default. */
+.popup .popuptext {
+    visibility: hidden;
+    width: 700px;
+    height: 800px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: fixed;
+    z-index: 1;
+    margin-left: 30%;
+}
+  
+/* Popup arrow */
+.popup .popuptext::after {
+    content: "";
+    position: fixed;
+    margin: 200px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+  
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 0.3s;
+    animation: fadeIn 0.3s;
+}
+
+/* Sets the style for the popup "X" buttons that closes the popup. */
+.popup .closeform-btn {
+    margin-left: 90%; 
+    margin-top: -5px; 
+    font-size: 30px;
+    cursor: pointer;
+}
+
+/* Sets the style for the giant grey box area that is inside the popup. */
+.popup .niu {
+    padding-top: 20px; 
+    padding-bottom: 20px; 
+    margin: 30px; 
+    background-color: #989898;
+    border-radius: 5px;
+}
+
+/* Sets the style for the text "centered" class that is inside the popup. */
+.popup .centered {
+    font-size: 20px; 
+    margin-bottom: 20px;
+}
+  
+ /* Sets the style for the "mySmallButton" class that is inside the popup. */
+.popup .mySmallButton {
+    margin-top: 20px;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+  
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+}
+  
+  
+/* IDs: */
+#homeButton {
+    height: 35px;
+    border-style: solid;
+    border-color: black;
+}
+    
+#searchShell {
+    background-color: #e2e2e2;
+}
+
+#newCustomerFormShell {
+    background-color: #e2e2e2;
+}
+  
+#newEbikeFormShell {
+    background-color: #e2e2e2;
+}
+    
+#closeForm {
+    background-color: white;
+}
+
+
+/* INTERACTABLE UI: */
+/* Sets the style for all "input" elements with the attribute '[type="text"]'. */
+input[type="text"] {
+    height: 35px;
+    width: 300px;
+    border-radius: 7px;
+}
+
+/* Sets the style for all "input" elements with the attribute '[type="checkbox"]'. */
+input[type="checkbox"] {
+    height: 30px;
+    width: 50px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+  
+ /* Sets the style for all "input" elements with the attribute '[type="date"]'. */
+input[type="date"] {
+    height: 35px;
+    width: 300px;
+    border-radius: 7px;
+}
+  
+/* Sets the style for all "input" elements with the attribute '[type="number"]'. */
+input[type="number"] {
+    height: 35px;
+    width: 300px;
+    border-radius: 7px;
+}
+
+/* Sets the style for the entire 'label' element. */
+label {
+    /* Changes the thickness of the font on the buttons. */
+    font-weight: bold;
+    /* This changes the font size of every text inside the 'label' element. */
+    font-size: 23px;
+}
+
+/* Sets the style for all the selectable/multiple choice UI elements. */
+select {
+    height: 35px;
+    width: 200px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+
+/* STATIC UI: */
+body, h1 {
+    z-index: 0;
+    font-family: "JetBrains Mono",monospace;
+}
+    
+.mainLogo {
+    height: 100px;
+}
+    
+.hidden {
+    display: none;
+}
+    
+.centered {
+    text-align: center;
+    margin: auto;
+}
+    
+.bordered {
+    border-style: solid;
+}
+
+img {
+    height: 35px;
+    padding-top: 7px;
+}
+    
+table {
+    border-spacing: 0;
+    border-style: solid;
+    border-color: #e2e2e2;
+}
+    
+th {
+    border-style: solid;
+}
+    
+tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+  
+  
+tbody tr:nth-child(even) {
+    background-color: #e2e2e2;
+}
+    
+table {
+    background-color: #ffffff;
+}
+    
+tr {
+    height: 20px;
+}
+    
+th {
+    font-size: 20px;
+    width: 320px;
+}
+    
+td {
+    font-size: 20px;
+}
+    
+.child {
+    display: inline-block;
+}
+
+
+/* BUTTONS: */
+/* Sets the style for the large "Homepage" buttons. [Button Archetype] */
+.myBigButton {
+    /* This changes how far away from the border the display items on the button are, vertically. */
+    padding-top: 20px;
+    /* This aligns the text inside the button into the center. */
+    text-align: center;
+    /* This determines how wide the button is. */
+    width: 350px;
+    /* This determines how tall the button is. */
+    height: 55px;
+    /* Changes how much the outer corners of the text box curves. */
+    border-radius: 5px;
+    /* This changes the font size of every text inside the 'myBigButton' class. */
+    font-size: 30px;
+    /* This changes the color of the buttons. */
+    color: yellow;
+    /* Changes the thickness of the font on the buttons. */
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    /* This changes the background color of the buttons. */
+    background-color: #226bc5;
+    /* This changes the position of the button vertically (does not change upon different window sizes). */
+    margin-bottom: 10px;
+    /* This removes the underline of the text to avoid the button looking like a link. */
+    text-decoration: none;
+}
+
+/* Add some hover effects to the buttons. */
+.myBigButton:hover {
+    box-shadow: 3px 3px grey;
+}
+
+/* Sets the style for the "SIDENAV" buttons. */
+.mySmallButton {
+    /* Refer to [Button Archetype] for the variables below: */
+    padding-top: 5px;
+    text-align: center;
+    width: 175px;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 20px;
+    color: whitesmoke;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #226bc5;
+    text-decoration: none;
+    cursor: pointer;
+}
+  
+/* Add some hover effects to the buttons. */
+.mySmallButton:hover {
+    box-shadow: 2px 2px grey;
+}
+    
+#topSelect {
+    margin-top: 75px;
+}
+
+
+/* SIDENAV: */
+/* Sets the style for the "SIDENAV" in the div element class. */
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: rgb(219, 219, 219); /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+    
+/* The navigation menu links. */
+.sidenav a {
+    margin-top: 20px;
+    padding-top: 15px;
+    text-decoration: none;
+    display: block;
+    transition: 0.3s;
+}
+    
+/* Sets the position and style the close button (top right corner). */
+.sidenav .closebtn {
+    position: absolute;
+    top: -22px;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+    
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
+}
+    
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}

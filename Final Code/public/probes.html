@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Probes</title>
+    <link href="app.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="/images/StarGazersLogo.png">
+</head>
+
+<body onload="getTable('/getProbe', fillTable), getTable('/getRelay', fillInsertForm), getTable('/getRelay', fillRelayDropdown), getTable('/getRelay', fillInsertFormWRelays), getTable('/getAsteroid', fillInsertFormWAsteroids)">
+
+    <!-- INSERT POPUP -->
+    <div class="popup">
+        <div class="popuptext" id="insertPopup">
+            <p id="closeNewProbeForm" class="closeform-btn">X</p>
+            <div id="newProbeRecord" class="niu">
+                <p class="centered">Please Enter Your Probe Details Below:</p>
+                <form id="probeInputForm" action="/insertProbe">
+                    <label>Probe Name: </label>
+                    <input type="text" name="probe_name" placeholder="Probe Name" required>
+                    </br>
+                    </br>
+                    <label>Assigned Asteroid: </label>
+                    <select id="asteroidDropdown" name="assigned_asteroid" type="text" placeholder="Asteroid Name" required>
+                    </select>
+                    </br>
+                    </br>
+                    <label>Outgoing Relay Connection: </label>
+                    <select id="relayName" name="relay_name" type="text" placeholder="Relay Name" required>
+                    </select>
+                    </br>
+                    </br>
+                    <label>In Use: </label>
+                    <input id="inUse" name="in_use" type="checkbox" value="1">
+                    </br>
+                    </br>
+                    <label>Is Functional: </label>
+                    <input type="checkbox" name="is_functional" checked="false" value="1">
+                    </br>
+                    </br>
+                    <button type="submit" class="mySmallButton centered">Add Probe</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPDATE POPUP -->
+    <div class="popup">
+        <div class="popuptext" id="updatePopup">
+            <p id="closeUpdateProbeForm" class="closeform-btn">X</p>
+            <div>
+                <p class="centered">Please Edit Your Probe's Name Below:</p>
+                <form action="/updateProbe" id="probeRecord" class="niu">
+                    <input id="probe_id" name="probe_id" type="hidden">
+                    <label>Probe Name: </label>
+                    <input id="probeName" name="probe_name" type="text" placeholder="Probe Name" required>
+                    </br>
+                    </br>
+                    <label>Assigned Asteroid: </label>
+                    <select id="updateAsteroidDropdown" name="asteroid_name" type="text" placeholder="Asteroid Name" required></select>
+                    </br>
+                    </br>
+                    <label>Outgoing Relay Connection: </label>
+                    <select id="updateRelayName" name="relay_name" type="text" placeholder="Relay Name" required></select>
+                    </br>
+                    </br>
+                    <label>In Use: </label>
+                    <input id="updateInUse" name="in_use" type="checkbox" value="1">
+                    </br>
+                    </br>
+                    <label>Is Functional: </label>
+                    <input id="isFunctional" name="is_functional" type="checkbox" value="1">
+                    </br>
+                    </br>
+                    <button type="submit" class="mySmallButton centered">Update Probe</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search POPUP -->
+    <div class="popup">
+        <div class="popuptext" id="searchPopup">
+            <p id="closeSearchProbeForm" class="closeform-btn">X</p>
+            <div id="searchRecord" class="niu">
+                <p class="centered">Search in Probes Below:</p>
+                <div id="probeSearchForm" action="/searchProbe">
+                    <label>Probe Name: </label>
+                    <select id="probeSearchDropdown">
+                    </select>
+                    </br>
+                    </br>
+                    <button id="searchSubmit" class="mySmallButton centered">Search</button>
+                </div>
+                </br>
+                </br>
+                <h2>Search Results: </h2>
+                <div id="searchTableBody" style="height: 150px; border-style: solid; border-width: 4px; border-color: black; border-radius: 5px; font-size: 25px; margin: 20px;"></div>
+            </div>  
+        </div>
+    </div>
+
+    <!-- CLICK OPENS NAV -->
+    <div style="background-color: grey; height: 50px; margin-top: -19px;"></div>
+    <img style="float: left; margin-top: -56px; height: 50px; cursor: pointer;" id="menupng" src="/images/menu-icon.png">
+
+    <!-- SIDENAV BEGIN-->
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div id="topSelect">
+            <a href="./index.html" class="mySmallButton centered">Home</a>
+            <a href="./reservations.html" class="mySmallButton centered">Reservations</a>
+            <a href="./universities.html" class="mySmallButton centered">Universities</a>
+            <a href="./probes.html" class="mySmallButton centered">Our Probes</a>
+            <a href="./relays.html" class="mySmallButton centered">Relay Towers</a>
+            <a href="./asteroids.html" class="mySmallButton centered">Known Asteroids</a>
+            <a href="./relaysprobes.html" class="mySmallButton centered">Relays/Probes</a>
+        </div>
+    </div>
+    <!-- SIDENAV END -->
+    
+    <!-- HEADER BEGIN -->
+    <div id="header">
+        <div style="height: 100px; background-color: #226bc5; border-width: 8px; border-style: solid; margin-left: 0px; margin-right: 0px; top: 0;"></div>
+        <img src="/images/StarGazersLogo.png" style="float: right; margin-top: -115px; margin-right: 8px; width: 99px; height: 99px;">
+        <p style="float: left; color: yellow; font-size: 50px; font-family: Arial, Helvetica, sans-serif; margin-top: -90px; margin-left: 20px;">STAR GAZERS NETWORK</p>
+    </div>
+    <!-- HEADER END -->
+
+    <!-- BUTTONS TO OPEN VARIOUS POPUPS-->
+    <div id="menu" class="centered" style="padding: 10px;">
+        <h3 id="showNewProbeForm" class="mySmallButton centered" style="margin-bottom: 10px; padding-top: 15px; height: 40px;">Create New Probe</h3>
+        <h3 id="openSearch" class="mySmallButton centered" style="padding-top: 15px; height: 40px;">Search</h3> <!-- Search will open another menu with more options to search (i.e. by phone, email, name, etc...) -->
+    </div>
+
+    <!-- CREATES A TABLE -->
+    <h1 class="centered" style="margin-top: 25px;">Probes</h1>
+    <table id="probeTable" class="centered">
+        <thead>
+            <th>Probe ID</th>
+            <th>Probe Name</th>
+            <th>Assigned Asteroid</th>
+            <th>In Use</th>
+            <th>Is Functional</th>
+            <th>Delete/Edit</th>
+        </thead>
+        <tbody id="probeTableBody" class=''></tbody>
+    </table>
+    <h2 id="empty" class="hidden">There are currently no Probes in this database</h2>
+
+    <!-- Showcases Attributed Material. -->
+    <p>Attributions:</p>
+    <a href="https://www.flaticon.com/free-icons/delete" title="delete icons">Delete icons created by bqlqn - Flaticon</a>
+    </br>
+    <a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons">Pencil icons created by bqlqn - Flaticon</a>
+</body>
+    
+
+<script>
+    // CONST VARIABLES //
+    const showNewProbeForm = document.getElementById('showNewProbeForm');
+    const closeNewProbeForm = document.getElementById('closeNewProbeForm');
+    const openSearch = document.getElementById('openSearch');
+    const closeSearch = document.getElementById('closeSearch');
+    let tbody = document.getElementById('probeTableBody');
+    const searchTableBody = document.getElementById('searchTableBody');
+    const probeRecord = document.getElementById('probeRecord');
+    const closeUpdateProbeForm = document.getElementById('closeUpdateProbeForm');
+    const updateAsteroidDropdown = document.getElementById('updateAsteroidDropdown');
+    const probeName = document.getElementById('probeName');
+    const updateInUse = document.getElementById('updateInUse');
+    const isFunctional = document.getElementById('isFunctional');
+    const probe_id = document.getElementById('probe_id');
+    const probeSearchDropdown = document.getElementById('probeSearchDropdown');
+    const searchSubmit = document.getElementById('searchSubmit');
+
+    // FUNCTIONS //
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        };
+
+        /* Set the width of the side navigation to 0 */
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        };
+
+        function findRowByID (id, tobject) {
+            // for a row in tbody, if the first column's html == id, return that row
+            for(let i = 0; i < tobject.rows.length; i++){
+                if(tobject.rows[i].cells[0].innerHTML == id){
+                    editRowAlt(tobject.rows[i], i, tobject);
+                };
+            };
+        };
+
+        function editRow (row, i, tobj) {
+            // Insert temp row underneath the target row that's been clicked
+            let tempRow = tobj.insertRow(i + 1)
+            let tempData = '<td id="editTempData">Enter New Data =></td><td><input id="newName" value="' + row.cells[1].innerHTML + '"></td><td><input id="newEmail" value="' + row.cells[2].innerHTML + '"></td><td><input id="newPhone" value="' + row.cells[3].innerHTML + '"></td><td><input id="newColor" value="' + row.cells[4].innerHTML + '"></td><td><input id="newSize" value="' + row.cells[5].innerHTML + '"></td><td><input id="newSerial" value="' + row.cells[6].innerHTML + '"></td><td><div id="update" class="mySmallButton">Update</div></td>'
+            tempRow.innerHTML = tempData
+            const update = document.getElementById('update');
+            update.addEventListener('click', () => {
+                updateRow(row.cells[0].innerHTML, tempRow);
+            });
+
+        };
+
+        function fillTable (tableArray) {
+            for (let i = 0; i < tableArray.length; i++){
+                let assigned_asteroid = tableArray[i].asteroid_name;
+                if (assigned_asteroid == null) {
+                    assigned_asteroid = 'Unassigned';
+                }
+                let newRow = '<tr><td>' + tableArray[i].probe_id + '</td><td>' + tableArray[i].probe_name + '</td><td>' + assigned_asteroid + '</td>';
+                    let inUse = tableArray[i].in_use
+                if (inUse == 1) {
+                    inUse = 'Yes'
+                } else {inUse = 'No';}
+                let inUseData = '<td>' + inUse + '</td>'; 
+                let isFunctional = tableArray[i].is_functional;
+                if (isFunctional == 1) {
+                    isFunctional = 'Yes'
+                } else {isFunctional = 'No';}
+                let isFunctionalData = '<td>' + isFunctional + '</td>';  
+                const tail = '<td><img id="' + 'remv' + tableArray[i].probe_id + '" src="/images/trash.png" style="height: 25px; margin-right: 25px; cursor: pointer;"><img id="' + 'edit' + tableArray[i].probe_id + '" src="/images/pencil.png" style="height: 25px; cursor: pointer;"></td></tr>';
+                newRow += inUseData
+                newRow += isFunctionalData                    
+                newRow += tail
+                tbody.innerHTML += newRow
+            };
+        };
+
+        function fillInsertForm (relayData) {
+            relayName.innerHTML = '<option>Select</option>';
+            for (let i = 0; i < relayData.length; i++){
+                relayName.innerHTML += '<option>' + relayData[i].relay_name + '</option';
+            }
+        }
+
+        function fillInsertFormWRelays (relayData) {
+            relayName.innerHTML = "<option>Select</option>";
+            for (let i = 0; i < relayData.length; i++) {
+                relayName.innerHTML += "<option>" + relayData[i].relay_name + "</option>"
+            }
+        }
+
+        function fillInsertFormWAsteroids (asteroidData) {
+            asteroidDropdown.innerHTML = "<option>Select</option>";
+            for (let i = 0; i < asteroidData.length; i++) {
+                asteroidDropdown.innerHTML += "<option>" + asteroidData[i].asteroid_name + "</option>"
+            }
+        }
+
+        function fillUpdateForm (probeData, asteroids) {
+            // add parameters so that the values do not stack up on repeated clicks.
+            updateAsteroidDropdown.innerHTML = null;
+            updateInUse.innerHTML = null;
+            isFunctional.innerHTML = null;
+            probeName.innerHTML = null;
+            // Probe ID
+            probe_id.setAttribute('value', probeData[0].probe_id);
+            // Probe Name
+            probeName.setAttribute('value', probeData[0].probe_name);
+            // Assigned Asteroid
+            if (probeData[0].asteroid_name !== null) {
+                let assigned_asteroid = probeData[0].asteroid_name;
+                let firstOption = "<option>" + assigned_asteroid + "</option>"
+                updateAsteroidDropdown.innerHTML += firstOption;
+                let secondOption = "<option>Unassigned</option>"
+                updateAsteroidDropdown.innerHTML += secondOption;
+            } else {
+                let firstOption = "<option>Unassigned</option>"
+                updateAsteroidDropdown.innerHTML += firstOption;
+            }
+            for (let i = 0; i < asteroids.length; i++) {
+                let option = "<option>" + asteroids[i].asteroid_name + "</option>";
+                updateAsteroidDropdown.innerHTML += option;
+            }
+            // In Use
+            if (probeData[0].in_use === 1) {
+                updateInUse.checked = true;
+            } else {
+                updateInUse.checked = false;
+            }
+            // Is Functional
+            if (probeData[0].is_functional === 1) {
+                isFunctional.checked = true;
+            } else {
+                isFunctional.checked = false;
+            }
+        };
+
+        function fillSearchDropdown(array) {
+            // reset values to null to prevent stacking on multiple searches
+            probeSearchDropdown.innerHTML = "<option>Select</option>";
+            // get new values
+            for (let i = 0; i < array.length; i++) {
+                let option = "<option>" + array[i].probe_name + "</option>";
+                probeSearchDropdown.innerHTML += option;
+            }
+        };
+
+        function fillRelayDropdown(array) {
+            updateRelayName.innerHTML = "<option>Select</option>";
+            for (let i = 0; i < array.length; i++) {
+                updateRelayName.innerHTML += "<option>" + array[i].relay_name + "</option>"
+            }
+        }
+
+        function fillSearchResults(searchArray) {
+            // reset to eliminate stacking
+            searchTableBody.innerHTML = null;
+            let in_use;
+            let is_functional;
+            if (searchArray[0].in_use == 1){
+                in_use = 'Yes';
+            } else {
+                in_use = 'No';
+            }
+            if (searchArray[0].is_functional == 1){
+                is_functional = 'Yes';
+            } else {
+                is_functional = 'No';
+            }
+            // display results (should only be one as of now but could change if the sql query is modified to include partial string matches
+            if (searchArray[0] !== null){
+                let data = "<div id='searchTableBody' style='background-color: black; height: 150px; font-size: 25px;'><div>Probe ID: " + searchArray[0].probe_id + "</div><div>Probe Name: " + searchArray[0].probe_name + "</div><div>Assigned Asteroid: " + searchArray[0].asteroid_name + "</div><div>In Use: " + in_use + "</div><div>Is Functional: " + is_functional + "</div></div>";
+                searchTableBody.innerHTML = data;
+            }
+        };
+
+    // EVENT LISTENERS //
+
+        // This opens popup form to add new "Probe" to db.
+        showNewProbeForm.addEventListener('click', () => {
+            const insertPopup = document.getElementById("insertPopup");
+            insertPopup.classList.toggle("show");
+        });
+
+        // This closes the new "Probe" popup form when X in corner is clicked.
+        closeNewProbeForm.addEventListener('click', () => {
+            const insertPopup = document.getElementById("insertPopup");
+            insertPopup.classList.toggle("show");
+        });
+
+        // This opens popup form to search for existing "Probe" in db.
+        openSearch.addEventListener('click', () => {
+            getProbeAlt();
+            const searchPopup = document.getElementById("searchPopup");
+            searchPopup.classList.toggle("show");
+        });
+
+        // This closes the search "Probe" popup form when X in corner is clicked.
+        closeSearchProbeForm.addEventListener('click', () => {
+            const searchPopup = document.getElementById("searchPopup");
+            searchPopup.classList.toggle("show");
+        });
+
+        // This closes the update "Probe" popup form when X in corner is clicked.
+        closeUpdateProbeForm.addEventListener('click', () => {
+            const updatePopup = document.getElementById("updatePopup");
+            updatePopup.classList.toggle("show");
+        });
+
+        document.addEventListener("click", function(e){
+            // Listen for a click on an <img> element
+            if(e.target && e.target.nodeName== 'IMG') {
+            // Do something based on id attribute of the clicked element 
+                if(e.target.getAttribute('id') == 'menupng'){
+                    openNav();
+                } if(e.target.getAttribute('id').substring(0, 4) == 'remv'){
+                    // Remove first four characters from ID string and send to delete function
+                    deleteProbe(parseInt(e.target.getAttribute('id').substring(4, e.target.getAttribute('id').length)));
+                } if(e.target.getAttribute('id').substring(0, 4) == 'edit'){
+                    getProbeByID(parseInt(e.target.getAttribute('id').substring(4, e.target.getAttribute('id').length)));
+                    const updatePopup = document.getElementById("updatePopup");
+                    updatePopup.classList.toggle("show");
+                }
+            } 
+        });
+
+        searchSubmit.addEventListener('click', () => {
+            if (probeSearchDropdown.value !== 'Select'){
+                searchProbe();
+            } else {
+                // reset to eliminate stacking
+                searchTableBody.innerHTML = null;
+            }
+        });
+
+    // XHR FUNCTIONS //
+    function getTable(route, nextFunc) {
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = route;
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                nextFunc(JSON.parse(this.responseText));
+            };
+        }
+        // Sending our request 
+        xhr.send();
+    }
+
+    function getProbeAlt() {
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = '/getProbe';
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                fillSearchDropdown(JSON.parse(this.responseText));
+            };
+        }
+        // Sending our request 
+        xhr.send();
+    }
+
+    async function getProbeByID (probe_id) {
+            // Creating an XHR object
+            const xhr = new XMLHttpRequest();
+            // open a connection
+            xhr.open("POST", "/getProbeByID");
+            // Set the request header
+            xhr.setRequestHeader(
+            "Content-Type", "application/json"
+            );
+            // Send request
+            var data = JSON.stringify(
+                { probe_id: probe_id }
+            );
+            xhr.send(data);
+            // Create a state change callback
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 &&
+                    xhr.status === 200) {
+                        getAsteroid(JSON.parse(this.responseText));
+                }
+            };
+    };
+
+    function deleteProbe (probeID) {
+        // Creating an XHR object
+        const xhr = new XMLHttpRequest();
+        // Open a connection
+        xhr.open("POST", "/deleteProbe");
+        // Set the request header
+        xhr.setRequestHeader(
+        "Content-Type", "application/json"
+        );
+        // Send request
+        var data = JSON.stringify(
+            { probe_id: probeID }
+        );
+        xhr.send(data);
+        // Create a state change callback
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 &&
+                xhr.status === 200) {
+                window.location.reload()
+            }
+        };
+    };
+
+    function getAsteroid (probeData) {
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = '/getAsteroid';
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                fillUpdateForm(probeData, JSON.parse(this.responseText));
+            };
+        }
+        // Sending our request 
+        xhr.send();
+    };
+
+    function getAsteroidByID (probeData) {
+            // Creating an XHR object
+            const xhr = new XMLHttpRequest();
+            // open a connection
+            xhr.open("POST", "/getAsteroidByID");
+            // Set the request header
+            xhr.setRequestHeader(
+            "Content-Type", "application/json"
+            );
+            // Send request
+            var data = JSON.stringify(
+                { asteroid_id: probeData[0].asteroid_name }
+            );
+            xhr.send(data);
+            // Create a state change callback
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 &&
+                    xhr.status === 200) {
+                    getAsteroid(probeData, JSON.parse(this.responseText));
+                }
+            };
+    };
+
+    function searchProbe() {
+        // Creating an XHR object
+        const xhr = new XMLHttpRequest();
+            // open a connection
+            xhr.open("POST", "/searchProbe");
+            // Set the request header
+            xhr.setRequestHeader(
+            "Content-Type", "application/json"
+            );
+            // Send request
+            var data = JSON.stringify(
+                { probe_name: probeSearchDropdown.value }
+            );
+            xhr.send(data);
+            // Create a state change callback
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 &&
+                    xhr.status === 200) {
+                    fillSearchResults(JSON.parse(this.responseText));
+                }
+            };
+    }
+
+    
+</script>
+
+</html>
